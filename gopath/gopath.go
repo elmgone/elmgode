@@ -1,17 +1,40 @@
+//	The MIT License (MIT)
+//
+//	Copyright (c) 2016 elmgone
+//
+//	Permission is hereby granted, free of charge, to any person obtaining a copy
+//	of this software and associated documentation files (the "Software"), to deal
+//	in the Software without restriction, including without limitation the rights
+//	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//	copies of the Software, and to permit persons to whom the Software is
+//	furnished to do so, subject to the following conditions:
+//
+//	The above copyright notice and this permission notice shall be included in all
+//	copies or substantial portions of the Software.
+//
+//	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//	SOFTWARE.
+
 package main
 
 import (
 	"flag"
 	"fmt"
-	//	"log"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
 var (
-	base = flag.Bool("base", false, "print the common string of the current working folder and the GOPATH")
-	pkg  = flag.Bool("package", false, "print the go package name of the current working folder in the GOPATH")
+	base  = flag.Bool("base", false, "print the common string of the current working folder and the GOPATH")
+	pkg   = flag.Bool("package", false, "print the go package name of the current working folder in the GOPATH")
+	debug = flag.Bool("debug", false, "print some debug log messages")
 )
 
 func main() {
@@ -32,7 +55,8 @@ func main() {
 		fmt.Println(gp[1])
 		return
 	}
-	fmt.Fprintln(os.Stderr, "usage: gopath (-base|-package)")
+	fmt.Fprintln(os.Stderr, "usage: gopath (-base|-package) [options]")
+	flag.Usage()
 	os.Exit(41)
 }
 
@@ -40,7 +64,6 @@ func splitGoPath() []string {
 	goPath_s := os.Getenv("GOPATH")
 	if goPath_s == "" {
 		fmt.Fprintln(os.Stderr, "GOPATH env var must be set")
-		//		os.Exit(-1)
 		return nil
 	}
 	wd, err := os.Getwd()
@@ -53,28 +76,29 @@ func splitGoPath() []string {
 	for _, goPath = range goPath_l {
 		goPathPrefix := filepath.Join(goPath, "src")
 		if strings.HasPrefix(wd, goPathPrefix) {
-			//			return goPath
-			//			log.Printf("gopath='%s'\n", goPath)
+			if *debug {
+				log.Printf("gopath='%s'\n", goPath)
+			}
 			ret = append(ret, goPath)
 			break
 		}
 	}
-	//	if goPath == "" {
 	if len(ret) == 0 {
 		fmt.Fprintln(os.Stderr, "not in a subfolder of $GOPATH/src")
 		return nil
 	}
-	//	log.Printf("wd='%s', len(wd)=%d, goPath='%s', len(goPath)=%d\n",
-	//		wd, len(wd), goPath, len(goPath))
+	if *debug {
+		log.Printf("wd='%s', len(wd)=%d, goPath='%s', len(goPath)=%d\n",
+			wd, len(wd), goPath, len(goPath))
+	}
 
-	//	goPkg := goPath[len(wd)+1:]
 	goPathBaseLen := len(goPath) + 1 + 4
 	if len(wd) <= goPathBaseLen {
 		fmt.Fprintln(os.Stderr, "not in a subfolder of $GOPATH/src")
 		return ret
 	}
 
-	goPkg := wd[goPathBaseLen:] //-- goPath[len(wd)+1:]
+	goPkg := wd[goPathBaseLen:]
 	ret = append(ret, goPkg)
 	return ret
 }

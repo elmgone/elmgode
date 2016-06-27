@@ -10,8 +10,10 @@ PROXY="--build-arg HTTP_PROXY=$http_proxy \
 	--build-arg https_proxy=$http_proxy"
 fi
 
+USER_IDs="--build-arg UserID=$(id -u) --build-arg GroupID=$(id -g)"
+
 echo "building docker image ..."
-if sudo docker build -t elmgone/elmgode $PROXY  . ; then
+if sudo docker build -t elmgone/elmgode $PROXY $USER_IDs . ; then
 	echo "done."
 else
 	echo "FAILED. ABORT."
@@ -21,7 +23,6 @@ fi
 
 LT="-v $(pwd)/elmgode-tools:/elmgode-tools"
 
-# [ -d elmgode-tools ] || mkdir elmgode-tools
 [ -d elmgode-tools ] && rm -rf elmgode-tools
 mkdir elmgode-tools || exit 23
 
@@ -43,3 +44,4 @@ else
 	echo "FAILED."
 	exit 27
 fi
+

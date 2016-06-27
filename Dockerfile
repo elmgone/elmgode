@@ -33,10 +33,13 @@ RUN GOOS=windows GOARCH=amd64 go install gopath
 RUN go get github.com/FiloSottile/gvt
 RUN go install github.com/FiloSottile/gvt
 
-# copy all the helper binaries onto the PATH
-##RUN cp /go/bin/* /usr/local/bin
+# create a non root developer user with the same user id as the developer who builds the docker image so that later the built files can be owned by him
+ARG UserID
+ARG GroupID
+RUN addgroup --gid "${GroupID}" developer
 
-##RUN [ -d /local-tools ] && cp /go/bin/gopath /go/bin/windows_amd64/gopath.exe /local-tools
+# FIXME: need to prevent interactive output
+RUN adduser --uid "${UserID}" --gid "${GroupID}" developer
 
 # open port for go doc
 EXPOSE 6060

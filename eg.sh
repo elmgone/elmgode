@@ -10,10 +10,19 @@ else
 	exit 23
 fi
 
+if [ "XX$http_proxy" != "XX" ] ; then
+PROXY="-e HTTP_PROXY=$http_proxy \
+	-e http_proxy=$http_proxy \
+	-e HTTPS_PROXY=$http_proxy \
+	-e https_proxy=$http_proxy"
+fi
+
+V1="-v $(pwd):/elm-src"
 if GOBASE=$(gopath --base) && GOPKG=$(gopath --package) ; then
-	# V1="-v $(pwd):/code"
 	V2="-v $GOBASE:/go"
 	W="-w /go/src/$GOPKG"
+else
+	W="-w /elm-src"
 fi
 
 
@@ -23,6 +32,7 @@ sudo docker run \
 	-it --rm \
 	$V1 $V2 $W \
 	-e "HOME=/tmp" \
+	$PROXY \
 	-u $(id -u):$(id -g) \
 	elmgone/elmgode \
 	"$@"

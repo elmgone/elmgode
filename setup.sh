@@ -10,31 +10,36 @@ PROXY="--build-arg HTTP_PROXY=$http_proxy \
 	--build-arg https_proxy=$http_proxy"
 fi
 
-sudo docker build -t elmgone/elmgode $PROXY  . || exit 17
+echo "building docker image ..."
+if sudo docker build -t elmgone/elmgode $PROXY  . ; then
+	echo "done."
+else
+	echo "FAILED. ABORT."
+	exit 29
+fi
 
 
-[ -d elmgode-tools ] || mkdir elmgode-tools
 LT="-v $(pwd)/elmgode-tools:/elmgode-tools"
 
+# [ -d elmgode-tools ] || mkdir elmgode-tools
+[ -d elmgode-tools ] && rm -rf elmgode-tools
+mkdir elmgode-tools || exit 23
 
-# exit 0
-#	-v "$(pwd)/elmgode-tools:/local-tools" \
-
-
-[ -d elmgode-tools ] || mkdir elmgode-tools
+echo "copying helper tools from docker image ..."
 if sudo docker run \
 	-it --rm \
 	$LT \
 	-e "HOME=/tmp" \
 	-u $(id -u):$(id -g) \
 	elmgone/elmgode \
-	bash -xc "[ -d /elmgode-tools ] && cp /go/bin/gopath /go/bin/windows_amd64/gopath.exe /elmgode-tools" ; then
+	bash -c "[ -d /elmgode-tools ] && cp /go/bin/gopath /go/bin/windows_amd64/gopath.exe /elmgode-tools" ; then
 
-	echo "SUCCESS!!  please make sure the tools in the folder elmgode-tools are in your PATH"
+	echo "SUCCESS!!  please make sure the tools in the local folder 'elmgode-tools' are in your PATH"
 	echo
-	cp go.sh elmgode-tools
+	cp eg.sh elmgode-tools
 	file elmgode-tools/*
 
 else
 	echo "FAILED."
+	exit 27
 fi

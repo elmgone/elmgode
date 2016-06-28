@@ -29,10 +29,6 @@ ADD gopath gopath
 RUN go install gopath
 RUN GOOS=windows GOARCH=amd64 go install gopath
 
-# add a vendoring tool written in Go
-RUN go get github.com/FiloSottile/gvt
-RUN go install github.com/FiloSottile/gvt
-
 # create a non root developer user with the same user id as the developer who builds the docker image so that later the built files can be owned by him
 ARG UserID
 ARG GroupID

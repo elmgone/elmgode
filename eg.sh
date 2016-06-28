@@ -4,6 +4,8 @@
 # GOBASE=$(gopath --base) || exit 13
 # GOPKG=$(gopath --package) || exit 14
 
+# SUDO=sudo
+
 if which gopath > /dev/null; then :
 else
 	echo "Please make sure the gopath tool created by elmgode/setup.sh is in your PATH!"
@@ -28,12 +30,12 @@ fi
 
 # -p 8888:8000
 #	-w "$WD"
-sudo docker run \
+$SUDO docker run \
 	-it --rm \
 	$V1 $V2 $W \
 	-e "HOME=/tmp" \
 	$PROXY \
 	-u $(id -u):$(id -g) \
-	elmgone/elmgode \
+	elmgone/elmgodex \
 	"$@"
 

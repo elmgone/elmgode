@@ -28,8 +28,10 @@ There is a wrapper script **eg.sh** for using the tools in the docker container.
 
 ### Go Development Tools
 
-1. the **go** tool for building
-2. **gvt** for vendoring
+1. the [https://golang.org/doc/articles/go_command.html](**go tool**) for building, testing, etc.
+2. [https://github.com/FiloSottile/gvt](**gvt**) for vendoring
+3. [https://github.com/benbjohnson/ego](**ego**) for (Html) templating
+4. [https://github.com/spf13/cobra](**cobra**) for CLI's
 
 ### Elm Development Tools
 

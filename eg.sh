@@ -29,12 +29,15 @@ fi
 
 
 # -p 8888:8000
+#	-p 6080:8000 \
 #	-w "$WD"
+
 $SUDO docker run \
 	-it --rm \
 	$V1 $V2 $W \
 	-e "HOME=/tmp" \
 	$PROXY \
+	-p 6060:6060 \
 	-u $(id -u):$(id -g) \
 	elmgone/elmgodex \
 	"$@"

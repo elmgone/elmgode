@@ -1,6 +1,6 @@
 # ElmGoDE
 
-*development environment for **Elm** and **Go** using a docker container*
+*development environment for* **Elm** *and / or* **Go** *using a docker container*
 
 ## Introduction
 

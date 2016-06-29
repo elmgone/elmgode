@@ -48,10 +48,12 @@ if $SUDO docker run \
 	elmgone/elmgodex \
 	bash -c "[ -d /elmgode-tools ] && cp /go/bin/gopath /go/bin/windows_amd64/gopath.exe /elmgode-tools" ; then
 
+	# cp eg.sh elmgode-tools
+	cat eg.sh | sed "s/# SUDO=sudo/SUDO=$SUDO/" > elmgode-tools/eg.sh || exit 31
+	chmod a+x elmgode-tools/*                                         || exit 32
+	echo
 	echo "SUCCESS!!  please make sure the tools in the local folder 'elmgode-tools' are in your PATH"
 	echo
-	# cp eg.sh elmgode-tools
-	cat eg.sh | sed "s/# SUDO=sudo/SUDO=$SUDO/" > elmgode-tools/eg.sh
 	file elmgode-tools/*
 
 else

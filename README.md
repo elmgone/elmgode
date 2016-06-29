@@ -12,7 +12,7 @@ The docker container maintained in this project enables you to build your Go bin
 ## Usage
 
 1. setup a development machine with a 64bit linux (if you don't have one)
-2. install docker and git
+2. install [docker](https://docs.docker.com/engine/installation) (1.9.1+) and [git](https://git-scm.com/download/linux)
 3. clone the elmgode repository: git clone https://github.com/elmgone/elmgode
 4. cd elmgode
 5. run ./setup.sh

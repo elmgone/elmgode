@@ -14,7 +14,7 @@ RUN apt-get install -y nodejs
 RUN npm install -g elm
 
 # open port for elm reactor
-EXPOSE 8000
+##EXPOSE 8000
 
 # ENTRYPOINT [ "elm" ]
 
@@ -24,10 +24,15 @@ EXPOSE 8000
 
 WORKDIR /go/src
 
+# # add a helper tool written in Go
+# ADD gopath gopath
+# RUN go install gopath
+# RUN GOOS=windows GOARCH=amd64 go install gopath
+
 # add a helper tool written in Go
-ADD gopath gopath
-RUN go install gopath
-RUN GOOS=windows GOARCH=amd64 go install gopath
+ADD egde egde
+RUN go install egde
+##RUN GOOS=windows GOARCH=amd64 go install egde
 
 # create a non root developer user with the same user id as the developer who builds the docker image so that later the built files can be owned by him
 ARG UserID
@@ -38,4 +43,4 @@ RUN addgroup --gid "${GroupID}" developer
 RUN adduser --uid "${UserID}" --gid "${GroupID}" developer
 
 # open port for go doc
-EXPOSE 6060
+##EXPOSE 6060

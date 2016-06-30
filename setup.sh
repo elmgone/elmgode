@@ -46,9 +46,10 @@ if $SUDO docker run \
 	-e "HOME=/tmp" \
 	-u $(id -u):$(id -g) \
 	elmgone/elmgodex \
-	bash -c "[ -d /elmgode-tools ] && cp /go/bin/gopath /go/bin/windows_amd64/gopath.exe /elmgode-tools" ; then
+	bash -c "[ -d /elmgode-tools ] && cp /go/bin/egde /elmgode-tools" ; then
 
-	# cp eg.sh elmgode-tools
+	## bash -c "[ -d /elmgode-tools ] && cp /go/bin/gopath /go/bin/windows_amd64/gopath.exe /elmgode-tools" ; then
+
 	cat eg.sh | sed "s/# SUDO=sudo/SUDO=$SUDO/" > elmgode-tools/eg.sh || exit 31
 	chmod a+x elmgode-tools/*                                         || exit 32
 	echo

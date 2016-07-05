@@ -48,6 +48,11 @@ RUN cd /go/bin && cp $(ls | grep -v _) /usr/local/go/bin
 
 # RUN find github.com/spf13/cobra -type d
 
+
+# add some more useful tools
+RUN apt-get install -y upx
+
+
 # # create a non root developer user with the same user id as the developer who builds the docker image so that later the built files can be owned by him
 ARG UserID
 ARG GroupID

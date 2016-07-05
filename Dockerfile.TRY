@@ -7,6 +7,8 @@ ARG GroupID
 # play around
 #
 
+# RUN apt-get install -y upx
+
 # # install purescript and it's tools
 # RUN npm install -g purescript
 # RUN npm install -g pulp

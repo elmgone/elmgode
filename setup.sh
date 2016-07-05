@@ -68,8 +68,22 @@ else
 	exit 27
 fi
 
-cat eg.sh | sed "s/# SUDO=sudo/SUDO=$SUDO/" > "$TOOLS_DIR/eg.sh" || exit 31
-chmod a+x "$TOOLS_DIR"/*                                         || exit 32
+cat eg.sh | sed "s/# SUDO=sudo/SUDO=$SUDO/" > "$TOOLS_DIR/eg" || exit 31
+
+for tool in go gvt cobra ego elm psc pulp upx ; do
+	cat > "$TOOLS_DIR/$tool" <<EOF
+#!/bin/bash
+#
+# wrapper for $tool
+#
+
+eg $tool "\$@"
+
+EOF
+
+done
+
+chmod a+x "$TOOLS_DIR"/*                                      || exit 32
 
 export PATH="$TOOLS_DIR:$PATH"
 
@@ -88,32 +102,32 @@ fi
 echo
 echo "### go tools ###"
 # set -x
-eg.sh go version
+eg go version
 echo
-eg.sh gvt help
+eg gvt help
 echo
-eg.sh cobra help
+eg cobra help
 echo
-eg.sh ego --version
+eg ego --version
 echo
 
 echo
 echo "### elm tools ###"
-eg.sh elm make --version
+eg elm make --version
 echo
-eg.sh elm package --help
+eg elm package --help
 echo
 echo "elm repl"
-eg.sh elm repl --version
+eg elm repl --version
 echo
-# eg.sh elm reactor --version
+# eg elm reactor --version
 
 echo
 echo "### PureScript tools ###"
 # echo "psc # PureScript compiler"
-eg.sh psc --help
+eg psc --help
 echo
-eg.sh pulp --help
+eg pulp --help
 # set +x
 
 echo

@@ -1,7 +1,14 @@
 #!/bin/bash
 #
+# wrapper script for running some development tools inside a docker container
+#
+# see https://github.com/elmgone/elmgode
+#
 
+# don't change this! - needed if docker needs to be run via sudo
 # SUDO=sudo
+
+SCR_DIR=/source
 
 if which egde > /dev/null; then :
 else
@@ -9,34 +16,37 @@ else
 	exit 23
 fi
 
+if GOBASE=$(egde gopath --base 2>/dev/null) && GOPKG=$(egde gopath --package 2>/dev/null) ; then
+	V="-v $GOBASE:/go"
+	W="-w /go/src/$GOPKG"
+else
+#	echo "Please make sure your source code is in the current directory and is in a proper Go workspace and the GOPATH environment variable is set correctly"
+#	exit 29
+
+	V="-v $(pwd):$SCR_DIR"
+	W="-w $SCR_DIR"
+fi
+
+#if echo "$*" | grep -e "^elm " -e "^psc " -e "^pulp " -e "^bower "  > /dev/null ; then
+#	V="-v $(pwd):$SCR_DIR"
+#	W="-w $SCR_DIR"
+#else
+#	if GOBASE=$(egde gopath --base) && GOPKG=$(egde gopath --package) ; then
+#		V="-v $GOBASE:/go"
+#		W="-w /go/src/$GOPKG"
+#	else
+#		echo "Please make sure your source code is in the current directory and is in a proper Go workspace and the GOPATH environment variable is set correctly"
+#		exit 29
+#	fi
+#fi
+
+
 if [ "XX$http_proxy" != "XX" ] ; then
 PROXY="-e HTTP_PROXY=$http_proxy \
 	-e http_proxy=$http_proxy \
 	-e HTTPS_PROXY=$http_proxy \
 	-e https_proxy=$http_proxy"
 fi
-
-if echo "$*" | grep -e "^elm " -e "^psc " -e "^pulp " > /dev/null ; then
-	V="-v $(pwd):/elm-src"
-	W="-w /elm-src"
-else
-	if GOBASE=$(egde gopath --base) && GOPKG=$(egde gopath --package) ; then
-		V="-v $GOBASE:/go"
-		W="-w /go/src/$GOPKG"
-	else
-		echo "Please make sure your source code is in the current directory and is in a proper Go workspace and the GOPATH environment variable is set correctly"
-		exit 29
-	fi
-fi
-
-# V1="-v $(pwd):/elm-src"
-# if GOBASE=$(gopath --base) && GOPKG=$(gopath --package) ; then
-# 	V2="-v $GOBASE:/go"
-# 	W="-w /go/src/$GOPKG"
-# else
-# 	W="-w /elm-src"
-# fi
-
 
 # -p 8888:8000
 #	-p 6080:8000 \

@@ -16,7 +16,7 @@ PROXY="-e HTTP_PROXY=$http_proxy \
 	-e https_proxy=$http_proxy"
 fi
 
-if echo "$*" | grep -e "^elm " > /dev/null ; then
+if echo "$*" | grep -e "^elm " -e "^psc " -e "^pulp " > /dev/null ; then
 	V="-v $(pwd):/elm-src"
 	W="-w /elm-src"
 else

@@ -13,6 +13,12 @@ RUN apt-get install -y nodejs
 # install elm
 RUN npm install -g elm
 
+# install purescript and it's tools
+RUN npm install -g purescript pulp bower
+##RUN npm install -g pulp
+##RUN npm install -g bower
+
+
 # open port for elm reactor
 ##EXPOSE 8000
 

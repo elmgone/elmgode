@@ -63,7 +63,7 @@ if echo "$*" | grep -e go | grep -e doc | grep -e '-http=:' > /dev/null ; then
 fi
 
 $SUDO docker run \
-	-it --rm \
+	-t --rm \
 	$V $W \
 	-e "HOME=/tmp" \
 	$PROXY \
